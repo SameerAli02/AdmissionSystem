@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Db_AdmissionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Tb_Login">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tb_Register">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContactNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="Db_AdmissionEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tb_Login" EntityType="Self.Tb_Login" />
+    <EntitySet Name="Tb_Register" EntityType="Self.Tb_Register" />
+    <EntitySet Name="CourseMasters" EntityType="Db_AdmissionModel.CourseMaster" />
+    <EntitySet Name="ClassMasters" EntityType="Db_AdmissionModel.ClassMaster" />
+    <AssociationSet Name="FK_ClassMaster_CourseMaster" Association="Db_AdmissionModel.FK_ClassMaster_CourseMaster">
+      <End Role="CourseMaster" EntitySet="CourseMasters" />
+      <End Role="ClassMaster" EntitySet="ClassMasters" />
+    </AssociationSet>
+    <EntitySet Name="SectionMasters" EntityType="Db_AdmissionModel.SectionMaster" />
+    <AssociationSet Name="FK_SectionMaster_ClassMaster" Association="Db_AdmissionModel.FK_SectionMaster_ClassMaster">
+      <End Role="ClassMaster" EntitySet="ClassMasters" />
+      <End Role="SectionMaster" EntitySet="SectionMasters" />
+    </AssociationSet>
+    <EntitySet Name="RegistrationAmountMasters" EntityType="Db_AdmissionModel.RegistrationAmountMaster" />
+    <AssociationSet Name="FK_RegistrationAmountMaster_CourseMaster" Association="Db_AdmissionModel.FK_RegistrationAmountMaster_CourseMaster">
+      <End Role="CourseMaster" EntitySet="CourseMasters" />
+      <End Role="RegistrationAmountMaster" EntitySet="RegistrationAmountMasters" />
+    </AssociationSet>
+    <EntitySet Name="RegistrationMasters" EntityType="Db_AdmissionModel.RegistrationMaster" />
+    <AssociationSet Name="FK_RegistrationMaster_ClassMaster" Association="Db_AdmissionModel.FK_RegistrationMaster_ClassMaster">
+      <End Role="ClassMaster" EntitySet="ClassMasters" />
+      <End Role="RegistrationMaster" EntitySet="RegistrationMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RegistrationMaster_CourseMaster" Association="Db_AdmissionModel.FK_RegistrationMaster_CourseMaster">
+      <End Role="CourseMaster" EntitySet="CourseMasters" />
+      <End Role="RegistrationMaster" EntitySet="RegistrationMasters" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="CourseMaster">
+    <Key>
+      <PropertyRef Name="CourseId" />
+    </Key>
+    <Property Name="CourseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CourseName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="SchoolCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ClassMasters" Relationship="Db_AdmissionModel.FK_ClassMaster_CourseMaster" FromRole="CourseMaster" ToRole="ClassMaster" />
+    <NavigationProperty Name="RegistrationAmountMasters" Relationship="Db_AdmissionModel.FK_RegistrationAmountMaster_CourseMaster" FromRole="CourseMaster" ToRole="RegistrationAmountMaster" />
+    <NavigationProperty Name="RegistrationMasters" Relationship="Db_AdmissionModel.FK_RegistrationMaster_CourseMaster" FromRole="CourseMaster" ToRole="RegistrationMaster" />
+  </EntityType>
+  <EntityType Name="ClassMaster">
+    <Key>
+      <PropertyRef Name="ClassId" />
+    </Key>
+    <Property Name="ClassId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ClassName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CourseId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CourseMaster" Relationship="Db_AdmissionModel.FK_ClassMaster_CourseMaster" FromRole="ClassMaster" ToRole="CourseMaster" />
+    <Property Name="SchoolCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SectionMasters" Relationship="Db_AdmissionModel.FK_SectionMaster_ClassMaster" FromRole="ClassMaster" ToRole="SectionMaster" />
+    <NavigationProperty Name="RegistrationMasters" Relationship="Db_AdmissionModel.FK_RegistrationMaster_ClassMaster" FromRole="ClassMaster" ToRole="RegistrationMaster" />
+  </EntityType>
+  <Association Name="FK_ClassMaster_CourseMaster">
+    <End Type="Db_AdmissionModel.CourseMaster" Role="CourseMaster" Multiplicity="1" />
+    <End Type="Db_AdmissionModel.ClassMaster" Role="ClassMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CourseMaster">
+        <PropertyRef Name="CourseId" />
+      </Principal>
+      <Dependent Role="ClassMaster">
+        <PropertyRef Name="CourseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SectionMaster">
+    <Key>
+      <PropertyRef Name="SectionId" />
+    </Key>
+    <Property Name="SectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ClassId" Type="Int32" Nullable="false" />
+    <Property Name="SectionName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="SchoolCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ClassMaster" Relationship="Db_AdmissionModel.FK_SectionMaster_ClassMaster" FromRole="SectionMaster" ToRole="ClassMaster" />
+  </EntityType>
+  <Association Name="FK_SectionMaster_ClassMaster">
+    <End Type="Db_AdmissionModel.ClassMaster" Role="ClassMaster" Multiplicity="1" />
+    <End Type="Db_AdmissionModel.SectionMaster" Role="SectionMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ClassMaster">
+        <PropertyRef Name="ClassId" />
+      </Principal>
+      <Dependent Role="SectionMaster">
+        <PropertyRef Name="ClassId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="RegistrationAmountMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CourseId" Type="Int32" Nullable="false" />
+    <Property Name="SchoolCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="RegistrationAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <NavigationProperty Name="CourseMaster" Relationship="Db_AdmissionModel.FK_RegistrationAmountMaster_CourseMaster" FromRole="RegistrationAmountMaster" ToRole="CourseMaster" />
+  </EntityType>
+  <Association Name="FK_RegistrationAmountMaster_CourseMaster">
+    <End Type="Db_AdmissionModel.CourseMaster" Role="CourseMaster" Multiplicity="1" />
+    <End Type="Db_AdmissionModel.RegistrationAmountMaster" Role="RegistrationAmountMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CourseMaster">
+        <PropertyRef Name="CourseId" />
+      </Principal>
+      <Dependent Role="RegistrationAmountMaster">
+        <PropertyRef Name="CourseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="RegistrationMaster">
+    <Key>
+      <PropertyRef Name="RegistrationId" />
+    </Key>
+    <Property Name="RegistrationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RegistrationNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CourseId" Type="Int32" Nullable="false" />
+    <Property Name="ClassId" Type="Int32" Nullable="false" />
+    <Property Name="StudentName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FatherName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MobileNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SchoolCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="RegistrationAmount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="RegistrationDate" Type="DateTime" Precision="0" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ClassMaster" Relationship="Db_AdmissionModel.FK_RegistrationMaster_ClassMaster" FromRole="RegistrationMaster" ToRole="ClassMaster" />
+    <NavigationProperty Name="CourseMaster" Relationship="Db_AdmissionModel.FK_RegistrationMaster_CourseMaster" FromRole="RegistrationMaster" ToRole="CourseMaster" />
+  </EntityType>
+  <Association Name="FK_RegistrationMaster_ClassMaster">
+    <End Type="Db_AdmissionModel.ClassMaster" Role="ClassMaster" Multiplicity="1" />
+    <End Type="Db_AdmissionModel.RegistrationMaster" Role="RegistrationMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ClassMaster">
+        <PropertyRef Name="ClassId" />
+      </Principal>
+      <Dependent Role="RegistrationMaster">
+        <PropertyRef Name="ClassId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RegistrationMaster_CourseMaster">
+    <End Type="Db_AdmissionModel.CourseMaster" Role="CourseMaster" Multiplicity="1" />
+    <End Type="Db_AdmissionModel.RegistrationMaster" Role="RegistrationMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CourseMaster">
+        <PropertyRef Name="CourseId" />
+      </Principal>
+      <Dependent Role="RegistrationMaster">
+        <PropertyRef Name="CourseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

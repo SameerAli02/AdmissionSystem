@@ -1,0 +1,81 @@
+﻿@model AdmissionSystem.Web.Models.LoginModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main">
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <!-- Sing in  Form -->
+        <p>@Convert.ToString(TempData["Message"])</p>
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="~/images/signin-image.jpg" alt="sing up image"></figure>
+                        <a href="@Url.Action("Register", "Account")" class="signup-image-link">Create an account</a>
+                    </div>
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Sign In</h2>
+                        <div class="form-group">
+                            <label for="your_name"><i class="fa fa-user"></i></label>
+                            @Html.EditorFor(m => m.UserName, new { htmlAttributes = new { @placeholder = "UserName" } })
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="your_pass"><i class="fa fa-key"></i></label>
+                            @Html.EditorFor(m => m.UserPassword, new { htmlAttributes = new { @placeholder = "Password", @type = "Password" } })
+                            @Html.ValidationMessageFor(m => m.UserPassword, "", new { @class = "text-danger" })
+                        </div>
+                        @*<div class="form-group">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                            </div>*@
+                        <div class="form-group">
+                            @Html.CheckBoxFor(m => m.isRemember, new { @style = "display:inline" })Remember me
+                            @Html.ValidationMessageFor(m => m.isRemember, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group form-button">
+                            <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
+                        </div>
+
+                        <div class="social-login">
+                            <span class="social-label">Or login with</span>
+                            <ul class="socials">
+                                <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+                                <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
+                                <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</div>
+@*<script>
+        $(document).ready(function () {
+            var unauthorized = '@TempData["message"]';
+            if (unauthorized != "") {
+                swal(unauthorized, "", "warning");
+            }
+            else {
+
+            }
+
+        });
+    </script>*@
+<script>
+$(document).ready(function () {
+    var unauthorized = '@TempData["message"]'; // Make sure TempData is correctly populated
+    if (unauthorized !== "") { // Check if unauthorized is not empty
+    swal(unauthorized, "", "warning"); // Display SweetAlert
+    }
+    // No need for an else block if you're not doing anything else
+    });
+</script>
+

@@ -1,0 +1,186 @@
+﻿@model AdmissionSystem.Web.Areas.Admission.Models.RegistrationMasterModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+@using (Html.BeginForm("Index", "RegistrationAmount", new { area = "Admission" }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <section class="conten">
+        <div class="row">
+            <!-- left column-->
+            <div class="col-md-12">
+                <!-- general form elements-->
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Registration Fee List</strong>
+                        <div class="card-tools text-left">
+                            <div class="input-group input-group-sm hidden-xs">
+                                <div>
+                                    <a id="showPopup" class="btn btn-info btnpopup"> Create/Edit Registration Amount</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.Box header-->
+                    <!--form start-->
+
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover" id="TableList">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Course Name</th>
+                                    <th>Registration Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.RegistrationFeeList != null)
+                                {
+                                    foreach (var item in Model.RegistrationFeeList)
+                                    {
+                                        <tr>
+                                            <td style="display:none">@item.id</td>
+                                            <td>@item.CourseName</td>
+                                            <td>@item.RegistrationAmount</td>
+                                            <td>
+                                                <a href="@Url.Action("Delete", "RegistrationAmount", new { area = "Admission", id = item.id})" onclick="return confirm('Sure want to delete this amount?');" class="btn btn-danger btn-xs" title="Delete"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .card-title {
+            font-size: 24px; /* You can adjust this value to increase or decrease the font size */
+        }
+    </style>
+
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-aqua-active">
+                    <h4 class="modal-title">Registration Fee</h4>
+                </div>
+                <div class="modal-body form=single mrg-0">
+                    <form id="postData">
+                        <div class="form-group">
+                            <label>Select Course</label>
+                            <div class="form-group">
+                                @Html.HiddenFor(model => model.id)
+                                @Html.DropDownList("CourseId", null, "Select Course", htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <div>
+                                @Html.EditorFor(model => model.RegistrationAmount, new { htmlAttributes = new { @lass = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.RegistrationAmount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-aqua-active">
+                    <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                    <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .modal {
+        position: absolute;
+        top: 10px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 10040;
+        overflow: auto;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        background: cadetblue;
+    }
+
+    .modal-footer {
+        background: cadetblue;
+    }
+
+    .modal-dialog {
+        max-width: 800px; /* Adjust the maximum width as needed */
+        margin: 30px auto; /* Center the modal horizontally */
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var unauthorized = '@TempData["success"]';
+        if (unauthorized != "") {
+            swal(unauthorized, "", "success");
+        }
+        else {
+
+        }
+
+    });
+</script>
+
+<script>
+    $("#showPopup").click(function () {
+        $("#successModal").modal("show");
+    });
+
+    $("#btnSave").click(function () {
+        var obj = {};
+        obj.CourseId = $('#CourseId').val();
+        obj.RegistrationAmount = $('#RegistrationAmount').val();
+        var url = '@Url.Action("AddRegistrationAmount", "RegistrationAmount")';
+        var urlRefresh = '@Url.Action("Index", "RegistrationAmount")';
+
+        if ($('#CourseId').val() == "") {
+            swal("Please Select Course", "", "success");
+            $('#CourseId').focus();
+            return false;
+        } else if ($('#RegistrationAmount').val() == "") {
+            swal("Please Enter Amount", "", "success");
+            $('#RegistrationAmount').focus();
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify(obj),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.isSuccess) {
+                        swal(data.message, "", "success");
+                        $("#successModal").modal("hide");
+                        window.location.href = urlRefresh;
+                        $('#CourseId').val('');
+                        $('#RegistrationAmount').val('');
+                    } else {
+                        swal(data.message, "", "error");
+                        $('#successModal').modal("show");
+                    }
+                }
+            });
+        }
+    });
+
+    document.getElementById('btnClose').addEventListener('click', function () {
+        document.getElementById('successModal').classList.remove('show');
+        //window.location.href = 'Index'; // Change 'index.html' to your actual index page URL
+        var urlRefresh = '@Url.Action("Index", "RegistrationAmount")';
+    });
+</script>
+

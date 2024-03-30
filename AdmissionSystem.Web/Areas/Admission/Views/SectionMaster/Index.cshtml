@@ -1,0 +1,71 @@
+﻿@model AdmissionSystem.Web.Areas.Admission.Models.SectionMasterModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong class="card-title">Section List</strong>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm hidden-xs">
+                            <div class="input-group-btn">
+                                <a href="@Url.Action("Create","SectionMaster", new { area = "Admission"})" class="btn btn-block btn-info">Create Section</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / .box-header -->
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Section Name</th>
+                                <th>Class Name</th>
+                                <th>Course Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.SectionList.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(model => model.SectionList[i].SectionName)</td>
+                                    <td>@Html.DisplayFor(model => model.SectionList[i].ClassName)</td>
+                                    <td>@Html.DisplayFor(model => model.SectionList[i].CourseName)</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit","SectionMaster", new { area = "Admission",SectionId=Model.SectionList[i].SectionId})" class="btn btn-warning"><i class="fa fa-pencil"></i></a>&nbsp;
+                                        <a href="@Url.Action("Delete","SectionMaster", new { area = "Admission",SectionId=Model.SectionList[i].SectionId})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .card-title {
+        font-size: 24px; /* You can adjust this value to increase or decrease the font size */
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var unauthorized = '@TempData["message"]';
+        if (unauthorized != "") {
+            swal(unauthorized, "", "success");
+        }
+        else {
+
+        }
+
+    });
+</script>
+

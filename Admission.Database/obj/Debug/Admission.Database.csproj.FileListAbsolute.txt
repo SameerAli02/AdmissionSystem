@@ -1,0 +1,12 @@
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\Admission.Database.dll.config
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\Admission.Database.dll
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\Admission.Database.pdb
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\EntityFramework.dll
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\EntityFramework.xml
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\obj\Debug\Admission.Database.csproj.AssemblyReference.cache
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\obj\Debug\Admission.Database.csproj.CoreCompileInputs.cache
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\obj\Debug\Admission.Database.csproj.CopyComplete
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\obj\Debug\Admission.Database.dll
+C:\Users\Sameer\source\repos\AdmissionSystem\Admission.Database\obj\Debug\Admission.Database.pdb

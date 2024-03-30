@@ -1,0 +1,110 @@
+﻿@model AdmissionSystem.Web.Areas.Admission.Models.CourseMasterModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong class="card-title">Course List</strong>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm hidden-xs">
+                            <div class="input-group-btn">
+                                <a href="@Url.Action("Create","CourseMaster", new { area = "Admission"})" class="btn btn-block btn-info">Create Course</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / .card-header -->
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Course Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.CourseList.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(model => model.CourseList[i].CourseName)</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit","CourseMaster", new { area = "Admission",CourseId=Model.CourseList[i].CourseId})" class="btn btn-warning"><i class="fa fa-pencil"></i></a>&nbsp;
+                                        <a href="@Url.Action("Delete","CourseMaster", new { area = "Admission",CourseId=Model.CourseList[i].CourseId})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .card-title {
+        font-size: 24px; /* You can adjust this value to increase or decrease the font size */
+    }
+</style>
+
+<!--<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Course List</h3>
+                    <div class="box-tools">
+                        <div class="row">
+                            <div class="col-xs-8 text-right">
+                                <div class="input-group input-group-sm hidden-xs">
+                                    <div class="input-group-btn">
+                                        <a href="@Url.Action("Create","CourseMaster", new { area = "Admission"})" class="btn btn-block btn-info">Create Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+<!-- / .box-header -->
+<!--<div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Course Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for(int i = 0; i < Model.CourseList.Count; i++)
+                            {
+                             <tr>
+                                <td>@Html.DisplayFor(model=>model.CourseList[i].CourseName)</td>
+                                <td>
+                                    <a href="@Url.Action("Edit","CourseMaster", new { area = "Admission",CourseId=Model.CourseList[i].CourseId})" class="btn btn-warning"><i class="fa fa-pencil"></i></a>&nbsp;
+                                    <a href="@Url.Action("Delete","CourseMaster", new { area = "Admission",CourseId=Model.CourseList[i].CourseId})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                </td>
+                             </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->
+<script>
+    $(document).ready(function () {
+        var unauthorized = '@TempData["message"]';
+        if (unauthorized != "") {
+            swal(unauthorized, "", "success");
+        }
+        else {
+
+        }
+
+    });
+</script>
+

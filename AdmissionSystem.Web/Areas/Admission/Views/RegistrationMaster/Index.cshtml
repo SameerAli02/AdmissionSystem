@@ -1,0 +1,80 @@
+﻿@model AdmissionSystem.Web.Areas.Admission.Models.RegistrationEntryModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong class="card-title">Registred Student List</strong>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm hidden-xs">
+                            <div class="input-group-btn">
+                                <a href="@Url.Action("Create","RegistrationMaster", new { area = "Admission"})" class="btn btn-block btn-info">Register Student</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / .box-header -->
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Registration No</th>
+                                <th>Student Name</th>
+                                <th>Father Name</th>
+                                <th>Mobile No</th>
+                                <th>Course</th>
+                                <th>Class</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RegistredStudentList != null)
+                            {
+                                foreach (var item in Model.RegistredStudentList)
+                                {
+                                    <tr>
+                                        <td>@item.RegistrationNo</td>
+                                        <td>@item.StudentName</td>
+                                        <td>@item.FatherName</td>
+                                        <td>@item.ModileNo</td>
+                                        <td>@item.CourseName</td>
+                                        <td>@item.ClassName</td>
+                                        <td>
+                                            <a href="@Url.Action("Edit","RegistrationMaster", new { area = "Admission",id = item.id})" class="btn btn-warning"><i class="fa fa-pencil"></i></a>&nbsp;
+                                            <a href="@Url.Action("Delete","RegistrationMaster", new { area = "Admission",id = item.id})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .card-title {
+        font-size: 24px; /* You can adjust this value to increase or decrease the font size */
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var unauthorized = '@TempData["message"]';
+        if (unauthorized != "") {
+            swal(unauthorized, "", "success");
+        }
+        else {
+
+        }
+
+    });
+</script>
+
