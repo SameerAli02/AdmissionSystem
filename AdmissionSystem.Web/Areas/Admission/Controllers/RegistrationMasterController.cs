@@ -2,6 +2,7 @@
 using AdmissionSystem.Web.Areas.Admission.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,7 +18,7 @@ namespace AdmissionSystem.Web.Areas.Admission.Controllers
 			string SchoolCode = Convert.ToString(Session["SchoolCode"]);
 			RegistrationEntryModel rm = new RegistrationEntryModel();
 			List<RegistredStudentList> data = (from a in db.RegistrationMasters
-											   where a.SchoolCode == SchoolCode
+											   where a.SchoolCode == SchoolCode && a.Active == false
 											   select new RegistredStudentList
 											   {
 												   id = a.RegistrationId,
@@ -93,5 +94,93 @@ namespace AdmissionSystem.Web.Areas.Admission.Controllers
 				return RedirectToAction("Index");
 			}
 		}
-    }
+
+		public ActionResult Edit(int id)
+		{
+			if (id == 0)
+			{
+				TempData["message"] = "Some Error Occured.";
+				return RedirectToAction("Index");
+			}
+			RegistrationEntryModel obj = new RegistrationEntryModel();
+			RegistrationMaster rm = db.RegistrationMasters.Find(id);
+			string SchoolCode = Convert.ToString(Session["SchoolCode"]);
+			ViewBag.CourseId = new SelectList((from p in db.CourseMasters where p.SchoolCode == SchoolCode select p).ToList(), "CourseId", "CourseName", rm.CourseId);
+			ViewBag.ClassId = new SelectList(db.ClassMasters.Where(c => c.CourseId == rm.CourseId).ToList(), "ClassId", "ClassName", rm.ClassId);
+			obj.id = id;
+			obj.StudentName = rm.StudentName;
+			obj.FatherName = rm.FatherName;
+			obj.MobileNo = rm.MobileNo;
+			obj.Address = rm.Address;
+			obj.RegistrationAmount = rm.RegistrationAmount??0;
+			obj.RegistrationNo = rm.RegistrationNo;
+			return View(obj);
+		}
+
+		[HttpPost]
+		public ActionResult Edit(RegistrationEntryModel obj)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					RegistrationMaster regist = db.RegistrationMasters.Find(obj.id);
+					string SchoolCode = Convert.ToString(Session["SchoolCode"]);
+					regist.StudentName = obj.StudentName;
+					regist.FatherName = obj.FatherName;
+					regist.CourseId = obj.CourseId;
+					regist.ClassId = obj.ClassId;
+					regist.MobileNo = obj.MobileNo;
+					regist.Address = obj.Address;
+					regist.RegistrationAmount = obj.RegistrationAmount;
+					regist.SchoolCode = SchoolCode;
+					regist.RegistrationDate = DateTime.Now;
+					regist.RegistrationNo = obj.RegistrationNo;
+					db.Entry(regist).State = System.Data.Entity.EntityState.Modified;
+					db.SaveChanges();
+					TempData["message"] = "Student Registered Successfully";
+					return RedirectToAction("Index");
+				}
+				else
+				{
+					TempData["message"] = "Please Enter Valid Data";
+					string SchoolCode = Convert.ToString(Session["SchoolCode"]);
+					ViewBag.CourseId = new SelectList((from p in db.CourseMasters where p.SchoolCode == SchoolCode select p).ToList(), "CourseId", "CourseName");
+					ViewBag.ClassId = new SelectList(Enumerable.Empty<SelectListItem>());
+					return View(obj);
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["message"] = "Error: " + ex.Message; 
+				return RedirectToAction("Index");
+			}
+		}
+
+		public ActionResult Delete(int id)
+		{
+			try
+			{
+				RegistrationMaster regist = db.RegistrationMasters.Find(id);
+				if (regist == null)
+				{
+					TempData["message"] = "Some Error Ouccured.Try Again!!";
+					return RedirectToAction("Index");
+				}
+				else
+				{
+					regist.Active = true;
+					db.Entry(regist).State = System.Data.Entity.EntityState.Modified;
+					db.SaveChanges();
+					TempData["message"] = "Registration Cancelled Successfully!!";
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["message"] = "Some Error Occured. Try Again.This Registration No. is related to some other Enteries";
+				return RedirectToAction("Index");
+			}
+			return RedirectToAction("Index");
+		}
+	}
 }

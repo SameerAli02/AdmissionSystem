@@ -2031,6 +2031,7 @@
     <Content Include="Areas\Admission\Views\RegistrationAmount\Index.cshtml" />
     <Content Include="Areas\Admission\Views\RegistrationMaster\Index.cshtml" />
     <Content Include="Areas\Admission\Views\RegistrationMaster\Create.cshtml" />
+    <Content Include="Areas\Admission\Views\RegistrationMaster\Edit.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_MainHeaderCSS.cshtml" />
     <Content Include="Views\Shared\_MainHeader.cshtml" />
